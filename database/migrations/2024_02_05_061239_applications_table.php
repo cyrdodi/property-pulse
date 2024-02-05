@@ -42,17 +42,21 @@ return new class extends Migration
       $table->text('description');
       $table->json('person_in_charge');
       $table->json('developer');
+      $table->string('url')->nullable();
       $table->unsignedBigInteger('organization_id');
       $table->unsignedBigInteger('platform_id');
-      $table->unsignedBigInteger('category_id');
       $table->unsignedBigInteger('user_id');
       $table->timestamps();
 
       $table->foreign('organization_id')->references('id')->on('organizations');
       $table->foreign('platform_id')->references('id')->on('platforms');
-      $table->foreign('category_id')->references('id')->on('categories');
       $table->foreign('user_id')->references('id')->on('users');
       $table->softDeletes();
+    });
+
+    Schema::create('application_category', function (Blueprint $table) {
+      $table->uuid('application_id');
+      $table->unsignedBigInteger('category_id');
     });
   }
 

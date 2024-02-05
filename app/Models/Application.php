@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Category;
+use App\Models\Platform;
+use App\Models\Organization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Application extends Model
 {
@@ -18,7 +24,7 @@ class Application extends Model
     'description',
     'person_in_charge',
     'developer',
-    'category_id',
+    'url',
     'organization_id',
     'platform_id',
     'user_id',
@@ -28,4 +34,19 @@ class Application extends Model
     'person_in_charge' => 'array',
     'developer' => 'array',
   ];
+
+  public function organization(): BelongsTo
+  {
+    return $this->belongsTo(Organization::class);
+  }
+
+  public function platform(): BelongsTo
+  {
+    return $this->belongsTo(Platform::class);
+  }
+
+  public function categories(): BelongsToMany
+  {
+    return $this->belongsToMany(Category::class);
+  }
 }
