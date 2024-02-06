@@ -2,16 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
-use App\Models\Category;
 use App\Models\Platform;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Application;
-use App\Models\Organization;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -24,13 +20,14 @@ use Filament\Forms\Components\ToggleButtons;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Filament\Resources\ApplicationResource\RelationManagers;
+use Filament\Forms\Components\Grid;
 use Filament\Tables\Filters\SelectFilter;
 
 class ApplicationResource extends Resource
 {
   protected static ?string $model = Application::class;
 
-  protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+  protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
   public static function form(Form $form): Form
   {
@@ -39,52 +36,61 @@ class ApplicationResource extends Resource
         Grid::make(2)
           ->schema(
             [
-              Section::make()
-                ->schema([
-                  TextInput::make('name'),
-                  Textarea::make('description'),
-                  Select::make('organization_id')
-                    ->relationship('organization', 'name')
-                    ->preload()
-                    ->searchable(),
-                  ToggleButtons::make('platform_id')
-                    ->options(Platform::all()->pluck('name', 'id'))
-                    ->inline()
-                    ->live(),
-                  // TODO: error jika edit tidak muncul walaupun platform == 1
-                  TextInput::make('url')
-                    ->url()
-                    ->visible(fn ($get) => $get('platform_id') === '1'),
-                  Select::make('categories')
-                    ->relationship('categories', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->multiple()
-                    ->createOptionForm([
-                      TextInput::make('name')
-                    ]),
-                ]),
-              Section::make('Kontak')
-                ->schema([
-                  Repeater::make('person_in_charge')
-                    ->schema([
-                      TextInput::make('name')
-                        ->required(),
-                      TextInput::make('position')
-                        ->label('Jabatan'),
-                      TextInput::make('phone')
-                    ]),
-                  Section::make('Developer')
-                    ->schema([
-                      TextInput::make('name')
-                        ->required(),
-                      TextInput::make('phone'),
-                      TextInput::make('email')
-                        ->email(),
-                      TextInput::make('website')
-                        ->url(),
-                    ]),
-                ])
+              Section::make([
+                TextInput::make('name'),
+                Textarea::make('description'),
+                Select::make('organization_id')
+                  ->relationship('organization', 'name')
+                  ->preload()
+                  ->searchable(),
+                ToggleButtons::make('platform_id')
+                  ->options(Platform::all()->pluck('name', 'id'))
+                  ->inline()
+                  ->live(),
+                TextInput::make('url')
+                  ->url()
+                  ->visible(function ($get, $record) {
+                    if (isset($record->platform_id)) {
+                      if ($get('platform_id') == 1) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    }
+                    if ($get('platform_id') == 1) {
+                      return true;
+                    }
+                  }),
+                // }),
+                Select::make('categories')
+                  ->relationship('categories', 'name')
+                  ->searchable()
+                  ->preload()
+                  ->multiple()
+                  ->createOptionForm([
+                    TextInput::make('name')
+                  ]),
+              ]),
+              Section::make([
+                Repeater::make('person_in_charge')
+                  ->schema([
+                    TextInput::make('name')
+                      ->required(),
+                    TextInput::make('position')
+                      ->label('Jabatan'),
+                    TextInput::make('phone')
+                  ]),
+                Section::make('Developer')
+                  ->schema([
+                    TextInput::make('name')
+                      ->required(),
+                    TextInput::make('phone'),
+                    TextInput::make('email')
+                      ->email(),
+                    TextInput::make('website')
+                      ->url(),
+                  ]),
+              ])->grow(false)
             ]
           )
       ]);
@@ -96,8 +102,7 @@ class ApplicationResource extends Resource
       ->columns([
         TextColumn::make('name')
           ->searchable(),
-        TextColumn::make('organization.name')
-          ->badge(),
+        TextColumn::make('organization.name'),
         TextColumn::make('platform.name')
           ->badge(),
         TextColumn::make('categories.name')
@@ -117,14 +122,28 @@ class ApplicationResource extends Resource
           ->preload()
           ->searchable()
           ->multiple(),
+        Tables\Filters\TrashedFilter::make(),
       ])
       ->actions([
         Tables\Actions\EditAction::make(),
+        Tables\Actions\DeleteAction::make(),
+        Tables\Actions\ForceDeleteAction::make(),
+        Tables\Actions\RestoreAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
           Tables\Actions\DeleteBulkAction::make(),
+          Tables\Actions\ForceDeleteBulkAction::make(),
+          Tables\Actions\RestoreBulkAction::make(),
         ]),
+      ]);
+  }
+
+  public static function getEloquentQuery(): Builder
+  {
+    return parent::getEloquentQuery()
+      ->withoutGlobalScopes([
+        SoftDeletingScope::class,
       ]);
   }
 
