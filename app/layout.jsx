@@ -1,4 +1,4 @@
-import React from "react";
+import NavBar from '@/components/NavBar'
 import '@/assets/styles/globals.css'
 
 export const metadata = {
@@ -11,7 +11,8 @@ const MainLayout = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <div className="p-8">{children}</div>
+        <NavBar />
+        <main>{children}</main>
       </body>
     </html>
   );
