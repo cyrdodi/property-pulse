@@ -11,7 +11,7 @@ const MainLayout = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <div>{children}</div>
+        <div className="p-8">{children}</div>
       </body>
     </html>
   );
