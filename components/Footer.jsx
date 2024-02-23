@@ -4,7 +4,6 @@ import Image from "next/image"
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  console.log(logo)
 
   return (
     <footer className="bg-gray-200 py-4 mt-auto">

@@ -1,13 +1,14 @@
 import Hero from "@/components/Hero";
 import InfoBoxes from "@/components/InfoBoxes";
 import Footer from "@/components/Footer";
+import HeroProperties from "@/components/HeroProperties";
 
 const HomePage = () => {
-  console.log("test");
   return (
     <div>
       <Hero />
       <InfoBoxes />
+      <HeroProperties />
       <Footer />
     </div>
   );
