@@ -7,7 +7,6 @@ const HeroProperties = () => {
     .sort(() => Math.random() - Math.random())
     .slice(0, 4);
   
-  console.log(properties);
   
   return (
     <>
@@ -27,10 +26,10 @@ const HeroProperties = () => {
           )}
         </div>
       </section>
-      <section class="m-auto max-w-lg my-10 px-6">
+      <section className="m-auto max-w-lg my-10 px-6">
         <Link
           href="/properties"
-          class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
+          className="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
         >
           View All Properties
         </Link>
