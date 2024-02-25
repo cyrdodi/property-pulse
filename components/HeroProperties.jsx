@@ -1,20 +1,7 @@
-import PropertyCard from "./PropertyCard";
 import Link from "next/link";
+import { fetchProperties } from "@/utils/requests";
 
-
-async function fetchProperties() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`);
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log(error);
-  }
-}
+import PropertyCard from "./PropertyCard";
 
 const HeroProperties = async () => {
 
