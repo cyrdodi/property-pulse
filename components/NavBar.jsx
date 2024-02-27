@@ -16,6 +16,7 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [providers, setProviders] = useState(true);
+  const [profilePic, setProfilePic] = useState(null);
 
   const pathname = usePathname();
 
@@ -27,6 +28,7 @@ const NavBar = () => {
     };
     setAuthProviders();
   }, []);
+
 
   return (
     <nav className="bg-blue-700 border-b border-blue-500">
@@ -165,7 +167,10 @@ const NavBar = () => {
                     <span className="sr-only">Open user menu</span>
                     <Image
                       className="h-8 w-8 rounded-full"
-                      src={profileDefault}
+                      src={session.user.image}
+                      width={0}
+                      height={0}
+                      sizes="100vw"
                       alt=""
                     />
                   </button>
@@ -188,7 +193,8 @@ const NavBar = () => {
                       tabIndex="-1"
                       id="user-menu-item-0"
                     >
-                      Your Profile
+                      {session.user.name}
+                      
                     </Link>
                     <Link
                       href="properties/saved"
