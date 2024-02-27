@@ -1,6 +1,8 @@
-import NavBar from '@/components/NavBar'
 import '@/assets/styles/globals.css'
+
 import Footer from "@/components/Footer";
+import NavBar from '@/components/NavBar'
+import AuthProvider from '@/components/AuthProvider';
 
 export const metadata = {
   title: 'Property Pulse',
@@ -10,13 +12,15 @@ export const metadata = {
 
 const MainLayout = ({ children }) => {
   return (
-    <html lang="en">
-      <body>
-        <NavBar />
-        <main>{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="en">
+        <body>
+          <NavBar />
+          <main>{children}</main>
+          <Footer />
+        </body>
+      </html>
+    </AuthProvider>
   );
 };
 
