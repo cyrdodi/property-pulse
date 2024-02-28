@@ -106,9 +106,9 @@ const NavBar = () => {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
-          {status == 'loading' && <p>Loading session</p>}
+          {status == "loading" && <p>Loading session</p>}
 
-          {status == 'unauthenticated' && (
+          {status == "unauthenticated" && (
             <div className="hidden md:block md:ml-6">
               <div className="flex items-center">
                 {providers &&
@@ -197,6 +197,9 @@ const NavBar = () => {
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                      }}
                     >
                       {session.user.name}
                     </Link>
@@ -206,6 +209,9 @@ const NavBar = () => {
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                      }}
                     >
                       Saved Properties
                     </Link>
@@ -215,6 +221,10 @@ const NavBar = () => {
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        signOut();
+                      }}
                     >
                       Sign Out
                     </button>
