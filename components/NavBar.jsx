@@ -11,12 +11,11 @@ import logo from "@/assets/images/logo-white.png";
 import profileDefault from "@/assets/images/profile.png";
 
 const NavBar = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [providers, setProviders] = useState(true);
-  const [profilePic, setProfilePic] = useState(null);
 
   const pathname = usePathname();
 
@@ -29,6 +28,7 @@ const NavBar = () => {
     setAuthProviders();
   }, []);
 
+  const userImage = session?.user?.image;
 
   return (
     <nav className="bg-blue-700 border-b border-blue-500">
@@ -106,14 +106,19 @@ const NavBar = () => {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
+          {status == 'loading' && <p>Loading session</p>}
 
-          {!session && (
+          {status == 'unauthenticated' && (
             <div className="hidden md:block md:ml-6">
               <div className="flex items-center">
                 {providers &&
                   // map over object
                   Object.values(providers).map((provider, index) => (
-                    <button onClick={() => signIn(provider.id)} key={ index } className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">
+                    <button
+                      onClick={() => signIn(provider.id)}
+                      key={index}
+                      className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
+                    >
                       <FaGoogle className="mr-2" />
                       <span>Login or Register</span>
                     </button>
@@ -167,7 +172,7 @@ const NavBar = () => {
                     <span className="sr-only">Open user menu</span>
                     <Image
                       className="h-8 w-8 rounded-full"
-                      src={session.user.image}
+                      src={userImage ?? profileDefault}
                       width={0}
                       height={0}
                       sizes="100vw"
@@ -194,7 +199,6 @@ const NavBar = () => {
                       id="user-menu-item-0"
                     >
                       {session.user.name}
-                      
                     </Link>
                     <Link
                       href="properties/saved"
@@ -255,14 +259,17 @@ const NavBar = () => {
               </Link>
             )}
 
-            {!session && (
+            {!session &&
               providers &&
               Object.values(providers).map((provider, index) => (
-                <button onClick={() => signIn(provider.id)} key={index} className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-4">
+                <button
+                  onClick={() => signIn(provider.id)}
+                  key={index}
+                  className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-4"
+                >
                   <FaGoogle className="mr-2" />
                   <span>Login or Register</span>
                 </button>
-              )
               ))}
           </div>
         </div>
