@@ -82,12 +82,12 @@ class ApplicationResource extends Resource
                   ]),
                 Section::make('Developer')
                   ->schema([
-                    TextInput::make('name')
+                    TextInput::make('developer.name')
                       ->required(),
-                    TextInput::make('phone'),
-                    TextInput::make('email')
+                    TextInput::make('developer.phone'),
+                    TextInput::make('developer.email')
                       ->email(),
-                    TextInput::make('website')
+                    TextInput::make('developer.website')
                       ->url(),
                   ]),
               ])->grow(false)

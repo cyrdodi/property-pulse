@@ -13,6 +13,12 @@ class CreateApplication extends CreateRecord
   public function mutateFormDataBeforeCreate(array $data): array
   {
     $data['user_id'] = auth()->user()->id;
+    // $data['developer'] = [
+    //   'name' => $data['developer_name'],
+    //   'phone' => $data['developer_phone'],
+    //   'email' => $data['developer_email'],
+    //   'website' => $data['developer_website'],
+    // ];
     return $data;
   }
 }
